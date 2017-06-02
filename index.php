@@ -9,8 +9,9 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
+        <form action="./most_relevants/most_relevants.php" method="POST">
         <?php
-            
+            session_start(); 
             require_once 'Tweet.php';
             
             $listaTweet = Array();
@@ -65,47 +66,6 @@ and open the template in the editor.
                 
                     $listaTweet[$i] = $tweet;
                     $i = $i + 1;
-
-                    /*echo '<li>';
-                    echo 'followers_count: '; echo $tweet->getFollowersCount();//echo $usuario->followers_count;
-                    echo '</li>';
-
-                    echo '<li>';
-                    echo 'retweet_count: '; echo $tweet->getRetweetCount();//echo $t->{"retweet_count"};
-                    echo '</li>';
-
-                    $k = $t->{"user"};
-                    echo '<li>';    
-                    echo 'favourites_count: '; echo $tweet->getFavoritesCount();//$usuario->favourites_count;
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'screen_name: '; echo $tweet->getScreenName();//$usuario->screen_name;
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'created_at: '; echo $tweet->getCreatAt();//$t->{"created_at"};
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'text:'; echo $tweet->getText();//$t->{"text"};
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'id_str_tweet:'; echo $tweet->getId_str_tweet();//$t->{"id_str"};
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'id_str_user:'; echo $tweet->getId_str_user();//$t->{"id_str"};
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'id_str_mentions:'; echo $tweet->getId_str_mentions();//$t->{"id_str"};
-                    echo '</li>';
-
-                    echo '<li>';    
-                    echo 'in_reply_to_user_id_str:'; echo $tweet->getId_in_reply_to_user_id_str();//$t->{"id_str"};
-                    echo '</li>';*/
                 }                
                 $position_json = $position_json + 1;
             }
@@ -122,8 +82,13 @@ and open the template in the editor.
                     return (($a->getAvaliacao() > $b->getAvaliacao()) ? -1 : 1 );
                 }
             );
+            $ser = serialize($listaTweet);
             
-            echo '<ul>';
+            $_SESSION['tweets'] = serialize($listaTweet);
+            //echo $ser;
+            
+            echo '<button type="submit" name="mostRelevants" value="">Ver os tweets mais relevantes</button>';
+            /*echo '<ul>';
             for ($y=0; $y<$i; $y = $y+1){
                 echo '<li>';
                 echo 'Posição json'; echo $listaTweet[$y]->getPositionJson();
@@ -133,7 +98,7 @@ and open the template in the editor.
                 echo 'Avaliação'; echo $listaTweet[$y]->getAvaliacao();
                 echo '</li>';
             }
-            echo '</ul>';
+            echo '</ul>';*/
             
             
             /*require_once 'vendor/autoload.php';
@@ -162,5 +127,6 @@ and open the template in the editor.
             echo '</ul>';
             */
         ?>
+        </form>
     </body>
 </html>
