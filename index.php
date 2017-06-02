@@ -11,18 +11,87 @@ and open the template in the editor.
     <body>
         <?php
             
-            require_once 'vendor/autoload.php';
+            require_once 'Tweet.php';
             
-            //use GuzzleHttp\Exception\ClientException;
-            //use GuzzleHttp\Exception\RequestException;
+            $listaTweet = Array();
+            $i = 0;
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'http://tweeps.locaweb.com.br/tweeps');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+            $headers = [
+                'Username: lcpapa@outlook.com'
+            ];
+
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            
+            $data = curl_exec($ch);
+            curl_close($ch);
+
+            $userData = json_decode($data); 
+            //var_dump($userData);
+            
+            '<ul>';
+            foreach($userData->statuses as $t) {               
+                $usuario = $t->{"user"};
+                
+                $followers_count = $usuario->followers_count;
+                $retweet_count = $t->{"retweet_count"};
+                $favourites_count = $usuario->favourites_count;
+                $screen_name = $usuario->screen_name;
+                $created_at = $t->{"created_at"};
+                $text = $t->{"text"};
+                $id_str_tweet = $t->{"id_str"};
+                $id_str_user = $usuario->id_str;
+                
+                $tweet = new Tweet($followers_count, $retweet_count, $favourites_count, $screen_name, $created_at, $text, $id_str_tweet, $id_str_user);
+                
+                $listaTweet[$i] = $tweet;
+                $i = $i + 1;
+                
+                echo '<li>';
+                echo 'followers_count: '; echo $tweet->getFollowersCount();//echo $usuario->followers_count;
+                echo '</li>';
+                
+                echo '<li>';
+                echo 'retweet_count: '; echo $tweet->getRetweetCount();//echo $t->{"retweet_count"};
+                echo '</li>';
+                
+                $k = $t->{"user"};
+                echo '<li>';    
+                echo 'favourites_count: '; echo $tweet->getFavoritesCount();//$usuario->favourites_count;
+                echo '</li>';
+                
+                echo '<li>';    
+                echo 'screen_name: '; echo $tweet->getScreenName();//$usuario->screen_name;
+                echo '</li>';
+                
+                echo '<li>';    
+                echo 'created_at: '; echo $tweet->getCreatAt();//$t->{"created_at"};
+                echo '</li>';
+                
+                echo '<li>';    
+                echo 'text:'; echo $tweet->getText();//$t->{"text"};
+                echo '</li>';
+                
+                echo '<li>';    
+                echo 'id_str_tweet:'; echo $tweet->getId_str_tweet();//$t->{"id_str"};
+                echo '</li>';
+                
+                echo '<li>';    
+                echo 'id_str_user:'; echo $tweet->getId_str_user();//$t->{"id_str"};
+                echo '</li>';
+            }
+            echo '</ul>';
+            
+            /*require_once 'vendor/autoload.php';
+            
             use GuzzleHttp\Client;
-            //use GuzzleHttp\Message\Request;
-            //use GuzzleHttp\Message\Response;
 
             $httpClient = new Client(); 
             
             $response = $httpClient->request('POST', 'http://tweeps.locaweb.com.br/tweeps', [
-                //"body" => json_encode($requestBody),
                 "headers" => [
                     "Username" => "lcpapa@outlook.com",
                 ],
@@ -40,11 +109,7 @@ and open the template in the editor.
                 $i = $i +1;;
             }
             echo '</ul>';
-            /*echo $g = count($userData);
-            for($i = 0; $i < count($userData[0]); $i++) {
-                echo "<div>ID: " . $userData[0][$i]->{'id_str'} . "</div>";
-                echo "<br />";
-            }*/
+            */
         ?>
     </body>
 </html>
