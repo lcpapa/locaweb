@@ -17,10 +17,13 @@ class Tweet {
     public $screen_name;
     public $created_at;
     public $text;
-    public $id_str_Tweet;
-    public $id_str_User;
-    
-    public function Tweet ($followersCount, $retweetCount, $favoritesCount, $screenName, $createdAt, $text_, $idStrTweet, $idStrUser){
+    public $id_str_tweet;
+    public $id_str_user;
+    public $id_str_mentions;
+    public $id_in_reply_to_user_id_str;
+
+
+    public function Tweet ($followersCount, $retweetCount, $favoritesCount, $screenName, $createdAt, $text_, $idStrTweet, $idStrUser, $idStrMentions, $id_in_reply_to_user_id_str){
         $this->followers_count = $followersCount;
         $this->favourites_count = $favoritesCount;
         $this->retweet_count = $retweetCount;
@@ -29,6 +32,8 @@ class Tweet {
         $this->text = $text_;
         $this->id_str_tweet = $idStrTweet;
         $this->id_str_user = $idStrUser;
+        $this->id_str_mentions = $idStrMentions;
+        $this->id_in_reply_to_user_id_str = $id_in_reply_to_user_id_str;
     }
     
     public function getFollowersCount(){
@@ -84,7 +89,7 @@ class Tweet {
     }
 
     public function setId_str_tweet($id_str_tweet) {
-        $this->id_str = $id_str_tweet;
+        $this->id_str_tweet = $id_str_tweet;
     }
     
     public function getId_str_user() {
@@ -92,8 +97,25 @@ class Tweet {
     }
 
     public function setId_str_user($id_str_user) {
-        $this->id_str = $id_str_user;
+        $this->id_str_user = $id_str_user;
     }
+    
+    public function getId_str_mentions() {
+        return $this->id_str_mentions;
+    }
+
+    public function setId_str_mentions($id_str_mentions) {
+        $this->id_str_mentions = $id_str_mentions;
+    }
+    
+    public function getId_in_reply_to_user_id_str() {
+        return $this->id_in_reply_to_user_id_str;
+    }
+
+    public function setId_in_reply_to_user_id_str($id_in_reply_to_user_id_str) {
+        $this->id_in_reply_to_user_id_str = $id_in_reply_to_user_id_str;
+    }
+    
 }
 
 ?>

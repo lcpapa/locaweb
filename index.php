@@ -36,6 +36,10 @@ and open the template in the editor.
             foreach($userData->statuses as $t) {               
                 $usuario = $t->{"user"};
                 
+                $mencao = $t->{"entities"};
+                $user_mentions = $mencao->user_mentions;
+                //var_dump($user_mentions);
+                
                 $followers_count = $usuario->followers_count;
                 $retweet_count = $t->{"retweet_count"};
                 $favourites_count = $usuario->favourites_count;
@@ -45,45 +49,65 @@ and open the template in the editor.
                 $id_str_tweet = $t->{"id_str"};
                 $id_str_user = $usuario->id_str;
                 
-                $tweet = new Tweet($followers_count, $retweet_count, $favourites_count, $screen_name, $created_at, $text, $id_str_tweet, $id_str_user);
+                if (count($user_mentions))
+                    $id_str_user_mentions = $user_mentions[0]->{"id_str"};
+                else 
+                    $id_str_user_mentions = null;
                 
-                $listaTweet[$i] = $tweet;
-                $i = $i + 1;
+                $id_in_reply_to_user_id_str = $t->{"in_reply_to_user_id_str"};
                 
-                echo '<li>';
-                echo 'followers_count: '; echo $tweet->getFollowersCount();//echo $usuario->followers_count;
-                echo '</li>';
+                $followers_count = $usuario->followers_count;
                 
-                echo '<li>';
-                echo 'retweet_count: '; echo $tweet->getRetweetCount();//echo $t->{"retweet_count"};
-                echo '</li>';
+                if ($id_str_user_mentions == 42 || $id_in_reply_to_user_id_str != 42){
+                    $tweet = new Tweet($followers_count, $retweet_count, $favourites_count, $screen_name, $created_at, $text, $id_str_tweet, $id_str_user, $id_str_user_mentions, $id_in_reply_to_user_id_str);
                 
-                $k = $t->{"user"};
-                echo '<li>';    
-                echo 'favourites_count: '; echo $tweet->getFavoritesCount();//$usuario->favourites_count;
-                echo '</li>';
-                
-                echo '<li>';    
-                echo 'screen_name: '; echo $tweet->getScreenName();//$usuario->screen_name;
-                echo '</li>';
-                
-                echo '<li>';    
-                echo 'created_at: '; echo $tweet->getCreatAt();//$t->{"created_at"};
-                echo '</li>';
-                
-                echo '<li>';    
-                echo 'text:'; echo $tweet->getText();//$t->{"text"};
-                echo '</li>';
-                
-                echo '<li>';    
-                echo 'id_str_tweet:'; echo $tweet->getId_str_tweet();//$t->{"id_str"};
-                echo '</li>';
-                
-                echo '<li>';    
-                echo 'id_str_user:'; echo $tweet->getId_str_user();//$t->{"id_str"};
-                echo '</li>';
+                    $listaTweet[$i] = $tweet;
+                    $i = $i + 1;
+
+                    echo '<li>';
+                    echo 'followers_count: '; echo $tweet->getFollowersCount();//echo $usuario->followers_count;
+                    echo '</li>';
+
+                    echo '<li>';
+                    echo 'retweet_count: '; echo $tweet->getRetweetCount();//echo $t->{"retweet_count"};
+                    echo '</li>';
+
+                    $k = $t->{"user"};
+                    echo '<li>';    
+                    echo 'favourites_count: '; echo $tweet->getFavoritesCount();//$usuario->favourites_count;
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'screen_name: '; echo $tweet->getScreenName();//$usuario->screen_name;
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'created_at: '; echo $tweet->getCreatAt();//$t->{"created_at"};
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'text:'; echo $tweet->getText();//$t->{"text"};
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'id_str_tweet:'; echo $tweet->getId_str_tweet();//$t->{"id_str"};
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'id_str_user:'; echo $tweet->getId_str_user();//$t->{"id_str"};
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'id_str_mentions:'; echo $tweet->getId_str_mentions();//$t->{"id_str"};
+                    echo '</li>';
+
+                    echo '<li>';    
+                    echo 'in_reply_to_user_id_str:'; echo $tweet->getId_in_reply_to_user_id_str();//$t->{"id_str"};
+                    echo '</li>';
+                }                
             }
             echo '</ul>';
+            
             
             /*require_once 'vendor/autoload.php';
             
