@@ -32,6 +32,8 @@ and open the template in the editor.
             $userData = json_decode($data); 
             //var_dump($userData);
             
+            $position_json = 0;
+            
             '<ul>';
             foreach($userData->statuses as $t) {               
                 $usuario = $t->{"user"};
@@ -58,13 +60,13 @@ and open the template in the editor.
                 
                 $followers_count = $usuario->followers_count;
                 
-                if ($id_str_user_mentions == 42 || $id_in_reply_to_user_id_str != 42){
-                    $tweet = new Tweet($followers_count, $retweet_count, $favourites_count, $screen_name, $created_at, $text, $id_str_tweet, $id_str_user, $id_str_user_mentions, $id_in_reply_to_user_id_str);
+                if (($id_str_user_mentions == 42 && $id_in_reply_to_user_id_str != 42) || ($id_str_user_mentions != 42 && $id_in_reply_to_user_id_str != 42)){
+                    $tweet = new Tweet($position_json, $followers_count, $retweet_count, $favourites_count, $screen_name, $created_at, $text, $id_str_tweet, $id_str_user, $id_str_user_mentions, $id_in_reply_to_user_id_str);
                 
                     $listaTweet[$i] = $tweet;
                     $i = $i + 1;
 
-                    echo '<li>';
+                    /*echo '<li>';
                     echo 'followers_count: '; echo $tweet->getFollowersCount();//echo $usuario->followers_count;
                     echo '</li>';
 
@@ -103,8 +105,33 @@ and open the template in the editor.
 
                     echo '<li>';    
                     echo 'in_reply_to_user_id_str:'; echo $tweet->getId_in_reply_to_user_id_str();//$t->{"id_str"};
-                    echo '</li>';
+                    echo '</li>';*/
                 }                
+                $position_json = $position_json + 1;
+            }
+            echo '</ul>';
+            
+            for ($y=0; $y<$i; $y = $y+1){
+                $listaTweet[$y]->avaliarTweet();                
+            }
+                        
+            usort(
+                $listaTweet,
+                function($a,$b) {
+                    if($a->getAvaliacao() == $b->getAvaliacao()) return 0;
+                    return (($a->getAvaliacao() > $b->getAvaliacao()) ? -1 : 1 );
+                }
+            );
+            
+            echo '<ul>';
+            for ($y=0; $y<$i; $y = $y+1){
+                echo '<li>';
+                echo 'Posição json'; echo $listaTweet[$y]->getPositionJson();
+                echo '</li>';
+                
+                echo '<li>';
+                echo 'Avaliação'; echo $listaTweet[$y]->getAvaliacao();
+                echo '</li>';
             }
             echo '</ul>';
             

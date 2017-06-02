@@ -11,6 +11,7 @@
  * @author Larissa
  */
 class Tweet {
+    public $position_json;
     public $followers_count;
     public $retweet_count;
     public $favourites_count;
@@ -21,9 +22,9 @@ class Tweet {
     public $id_str_user;
     public $id_str_mentions;
     public $id_in_reply_to_user_id_str;
-
-
-    public function Tweet ($followersCount, $retweetCount, $favoritesCount, $screenName, $createdAt, $text_, $idStrTweet, $idStrUser, $idStrMentions, $id_in_reply_to_user_id_str){
+    public $avaliacao;
+    
+    public function Tweet ($positionJson, $followersCount, $retweetCount, $favoritesCount, $screenName, $createdAt, $text_, $idStrTweet, $idStrUser, $idStrMentions, $idInReplyToUserIdStr){
         $this->followers_count = $followersCount;
         $this->favourites_count = $favoritesCount;
         $this->retweet_count = $retweetCount;
@@ -33,7 +34,16 @@ class Tweet {
         $this->id_str_tweet = $idStrTweet;
         $this->id_str_user = $idStrUser;
         $this->id_str_mentions = $idStrMentions;
-        $this->id_in_reply_to_user_id_str = $id_in_reply_to_user_id_str;
+        $this->id_in_reply_to_user_id_str = $idInReplyToUserIdStr;
+        $this->position_json = $positionJson;
+    }
+    
+    public function getPositionJson(){
+        return $this->position_json;
+    }
+    
+    public function setPositionJson($position_json){
+        $this->position_json = $position_json;
     }
     
     public function getFollowersCount(){
@@ -114,6 +124,30 @@ class Tweet {
 
     public function setId_in_reply_to_user_id_str($id_in_reply_to_user_id_str) {
         $this->id_in_reply_to_user_id_str = $id_in_reply_to_user_id_str;
+    }
+    
+    public function getAvaliacao() {
+        return $this->avaliacao;
+    }
+
+    public function setAvaliacao($avaliacao) {
+        $this->avaliacao = $avaliacao;
+    }
+    
+    public function avaliarTweet(){
+        //$this->avaliacao
+        // Usuário com mais seguidores = 0.6
+        // Tweets com mais retweets = 0.3
+        // Tweets com mais like =  0.15
+        
+        $pond_user = 0.6 * $this->getFollowersCount();
+        $pond_retweets = 0.3 * $this->getRetweetCount();
+        $pond_likes = 0.15 * $this->getFavoritesCount();
+        
+        $valor_avaliacao= $pond_user + $pond_retweets + $pond_likes;
+        
+        $this->setAvaliacao($valor_avaliacao);
+        
     }
     
 }
